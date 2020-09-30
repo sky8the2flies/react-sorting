@@ -1,67 +1,49 @@
-import React, { useState } from 'react';
-import './App.css';
-import SortItem from './components/SortItem';
+import React, { useState } from 'react'
 
 let history = [];
-let timer = null;
-let step = 0;
 
 function App() {
-  const [arr, setArr] = useState(resetArray())
+  const [arr, setArr] = useState(resetArr())
 
-  function resetArray() {
-    history = [];
-    step = 0;
-    return (
-      new Array(10).fill().map(() => (
-        {
-          num: Math.floor(Math.random() * 100),
-          eval: false,
-          sorted: false,
-        }
-      ))
-    )
+  function resetArr() {
+    return new Array(10).fill().map(() => {
+      return ({
+      num: Math.floor(Math.random() * 100),
+      eval: false
+    })})
   }
-  
-  function bubbleSort(sortArr) {
-    history = [[...sortArr]]
-    step = 0;
-    const len = sortArr.length;
+
+  function bubbleSort() {
+    const history = [];
+    const sArr = arr.slice();
+    let len = sArr.length;
     for (let i = len-1; i >= 0; i--) {
-      for (let j = 1; j <= i; j++) {
-        if (sortArr[j-1].num > sortArr[j].num) {
-          const temp = sortArr[j-1];
-          console.log(temp)
-          sortArr[j] = temp;
+      for (let j = 1; j<=i; j++) {
+        if (sArr[j-1].num > sArr[j].num) {
+          const temp = sArr[j-1].num;
+          sArr[j-1].num = sArr[j].num;
+          sArr[j].num = temp;
         }
-        sortArr[j].eval = true;
-        sortArr[j-1].eval = true;
-        history.push(sortArr)
+        history.push(sArr);
       }
     }
     console.log(history)
-    // setInterval(() => this.runTimer(), 5000)
   }
 
-  // function runTimer() {
-  //   this.setState({arr: history[step]})
-  //   step+=1;
-  //   if (step >= history.length-1) {
-  //     clearInterval(timer);
-  //   }
-  // }
-
   return (
+    <div>
       <div className="arr-container">
-        {arr.map((item, idx) =>
-          <SortItem
-            key={idx}
-            item={item}
-          />
+        {arr.map((item, idx) => 
+          <div key={idx} className="arr-item">
+            {item.num}
+          </div>
         )}
-        <button onClick={() => bubbleSort(arr.slice())}>Bubble</button>
       </div>
-  );
+      <div>
+        <button onClick={() => bubbleSort()}>Bubble</button>
+      </div>
+    </div>
+  )
 }
 
 export default App;
